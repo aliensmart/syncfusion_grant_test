@@ -1,11 +1,12 @@
 
-import './App.css';
+import './index.css';
 import * as React from 'react';
-import { GanttComponent, EditDialogFieldsDirective, DayMarkers, EditDialogFieldDirective, Inject, Edit, Selection, Toolbar, ColumnsDirective, ColumnDirective, EventMarkersDirective, EventMarkerDirective } from '@syncfusion/ej2-react-gantt';
-import { editingData, editingResources } from './data';
+import { GanttComponent, Inject, Selection, DayMarkers, ContextMenu, Reorder, Resize, ColumnMenu, Toolbar, Edit, Filter, Sort, ColumnsDirective, ColumnDirective } from '@syncfusion/ej2-react-gantt';
+import { projectNewData } from './data';
 import { SampleBase } from './sample-base';
-
-export class Editing extends SampleBase {
+import { PropertyPane } from './property-pane';
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+export class Events extends SampleBase {
     constructor() {
         super(...arguments);
         this.taskFields = {
@@ -16,74 +17,255 @@ export class Editing extends SampleBase {
             duration: 'Duration',
             progress: 'Progress',
             dependency: 'Predecessor',
-            child: 'subtasks',
-            notes: 'info',
-            resourceInfo: 'resources'
+            child: 'subtasks'
         };
-        this.resourceFields = {
-            id: 'resourceId',
-            name: 'resourceName'
-        };
+        this.columns = [
+            { field: 'TaskID', width: 60 },
+            { field: 'TaskName', width: 250 },
+            { field: 'StartDate' },
+            { field: 'EndDate' },
+            { field: 'Duration' },
+            { field: 'Predecessor' },
+            { field: 'Progress' },
+        ];
+        this.toolbar = ['Add', 'Edit', 'Update', 'Delete', 'Cancel', 'ExpandAll', 'CollapseAll', 'Search'];
         this.editSettings = {
-            allowAdding: true,
             allowEditing: true,
+            allowAdding: true,
             allowDeleting: true,
             allowTaskbarEditing: true,
-            showDeleteConfirmDialog: true
+        };
+        this.labelSettings = {
+            leftLabel: 'TaskName'
         };
         this.splitterSettings = {
             columnIndex: 2
         };
-        this.projectStartDate = new Date('03/25/2019');
-        this.projectEndDate = new Date('07/28/2019');
-        this.gridLines = 'Both';
-        this.toolbar = ['Add', 'Edit', 'Update', 'Delete', 'Cancel', 'ExpandAll', 'CollapseAll'];
-        this.timelineSettings = {
-            topTier: {
-                unit: 'Week',
-                format: 'MMM dd, y',
-            },
-            bottomTier: {
-                unit: 'Day',
-            },
-        };
-        this.labelSettings = {
-            leftLabel: 'TaskName',
-            rightLabel: 'resources'
-        };
-        this.eventMarkerDay1 = new Date('4/17/2019');
-        this.eventMarkerDay2 = new Date('5/3/2019');
-        this.eventMarkerDay3 = new Date('6/7/2019');
-        this.eventMarkerDay4 = new Date('7/16/2019');
+        this.projectStartDate = new Date('03/24/2019');
+        this.projectEndDate = new Date('07/06/2019');
+    }
+    created() {
+        this.appendElement('Gantt <b>created</b> event called<hr>');
+    }
+    load() {
+        this.appendElement('Gantt <b>load</b> event called<hr>');
+    }
+    dataBound(args) {
+      console.log(args)
+        this.appendElement('Gantt <b>dataBound</b> event called<hr>');
+    }
+    toolbarClick(args) {
+        console.log(args)
+        switch (args.item.text) {
+          case 'PDF Export':
+              this.gridInstance.pdfExport();
+              break;
+          case 'Excel Export':
+              this.gridInstance.excelExport();
+              break;
+          case 'CSV Export':
+              this.gridInstance.csvExport();
+              break;
+          case 'Add':
+              console.log("ADDING");
+              
+              // console.log(this.gridInstance);
+              break;
+          case 'Update':
+              console.log("UPDATING");
+              // console.log(this.gridInstance.dataSource)
+              break;
+      }
+        this.appendElement('Gantt <b>toolbarClick</b> event called<hr>');
+
+    }
+    beforeTooltipRender() {
+        this.appendElement('Gantt <b>beforeTooltipRender</b> event called<hr>');
+    }
+    actionBegin() {
+        this.appendElement('Gantt <b>actionBegin</b> event called<hr>');
+    }
+    actionComplete() {
+        this.appendElement('Gantt <b>actionComplete</b> event called<hr>');
+    }
+    cellEdit() {
+        this.appendElement('Gantt <b>cellEdit</b> event called<hr>');
+    }
+    endEdit() {
+        this.appendElement('Gantt <b>endEdit</b> event called<hr>');
+    }
+    taskbarEditing() {
+        this.appendElement('Gantt <b>taskbarEditing</b> event called<hr>');
+    }
+    taskbarEdited() {
+        this.appendElement('Gantt <b>taskbarEdited</b> event called<hr>');
+    }
+    rowSelecting() {
+        this.appendElement('Gantt <b>rowSelecting</b> event called<hr>');
+    }
+    rowSelected() {
+        this.appendElement('Gantt <b>rowSelected</b> event called<hr>');
+    }
+    rowDeselecting() {
+        this.appendElement('Gantt <b>rowDeselecting</b> event called<hr>');
+    }
+    rowDeselected() {
+        this.appendElement('Gantt <b>rowDeselected</b> event called<hr>');
+    }
+    columnDragStart() {
+        this.appendElement('Gantt <b>columnDragStart</b> event called<hr>');
+    }
+    columnDrag() {
+        this.appendElement('Gantt <b>columnDrag</b> event called<hr>');
+    }
+    columnDrop() {
+        this.appendElement('Gantt <b>columnDrop</b> event called<hr>');
+    }
+    expanding() {
+        this.appendElement('Gantt <b>expanding</b> event called<hr>');
+    }
+    expanded() {
+        this.appendElement('Gantt <b>expanded</b> event called<hr>');
+    }
+    collapsing() {
+        this.appendElement('Gantt <b>collapsing</b> event called<hr>');
+    }
+    collapsed() {
+        this.appendElement('Gantt <b>collapsed</b> event called<hr>');
+    }
+    columnMenuClick() {
+        this.appendElement('Gantt <b>columnMenuClick</b> event called<hr>');
+    }
+    columnMenuOpen() {
+        this.appendElement('Gantt <b>columnMenuOpen</b> event called<hr>');
+    }
+    contextMenuClick() {
+        this.appendElement('Gantt <b>contextMenuClick</b> event called<hr>');
+    }
+    contextMenuOpen() {
+        this.appendElement('Gantt <b>contextMenuOpen</b> event called<hr>');
+    }
+    resizeStart() {
+        this.appendElement('Gantt <b>resizeStart</b> event called<hr>');
+    }
+    resizing() {
+        this.appendElement('Gantt <b>resizing</b> event called<hr>');
+    }
+    resizeStop() {
+        this.appendElement('Gantt <b>resizeStop</b> event called<hr>');
+    }
+    splitterResizeStart() {
+        this.appendElement('Gantt <b>splitterResizeStart</b> event called<hr>');
+    }
+    splitterResizing() {
+        this.appendElement('Gantt <b>splitterResizing</b> event called<hr>');
+    }
+    splitterResized() {
+        this.appendElement('Gantt <b>splitterResized</b> event called<hr>');
+    }
+    recordDoubleClick() {
+        this.appendElement('Gantt <b>recordDoubleClick</b> event called<hr>');
+    }
+    onTaskbarClick() {
+        this.appendElement('Gantt <b>onTaskbarClick</b> event called<hr>');
+    }
+    appendElement(html) {
+        let span = document.createElement('span');
+        span.innerHTML = html;
+        let log = document.getElementById('EventLog');
+        log.insertBefore(span, log.firstChild);
+    }
+    clear() {
+        document.getElementById('EventLog').innerHTML = '';
     }
     render() {
         return (<div className='control-pane'>
         <div className='control-section'>
-          <GanttComponent id='Editing' dataSource={editingData} dateFormat={'MMM dd, y'} treeColumnIndex={1} allowSelection={true} showColumnMenu={false} highlightWeekends={true} allowUnscheduledTasks={true} projectStartDate={this.projectStartDate} projectEndDate={this.projectEndDate} taskFields={this.taskFields} timelineSettings={this.timelineSettings} labelSettings={this.labelSettings} splitterSettings={this.splitterSettings} height='410px' editSettings={this.editSettings} gridLines={this.gridLines} toolbar={this.toolbar} resourceFields={this.resourceFields} resources={editingResources}>
-            <ColumnsDirective>
+          <div className='col-lg-9'>
+            <GanttComponent id='Events' 
+            dataSource={projectNewData} 
+            highlightWeekends={true} 
+            treeColumnIndex={1} 
+            allowSelection={true} 
+            allowSorting={true} 
+            allowReordering={true} 
+            allowResizing={true} 
+            enableContextMenu={true} 
+            showColumnMenu={true} 
+            columns={this.columns} 
+            toolbar={this.toolbar} 
+            editSettings={this.editSettings} 
+            splitterSettings={this.splitterSettings} 
+            taskFields={this.taskFields} 
+            labelSettings={this.labelSettings} 
+            height='410px' 
+            created={this.created.bind(this)} 
+            load={this.load.bind(this)} 
+            dataBound={this.dataBound.bind(this)} 
+            toolbarClick={this.toolbarClick.bind(this)} 
+            beforeTooltipRender={this.beforeTooltipRender.bind(this)} 
+            actionBegin={this.actionBegin.bind(this)} actionComplete={this.actionComplete.bind(this)} 
+            cellEdit={this.cellEdit.bind(this)} 
+            endEdit={this.endEdit.bind(this)} 
+            taskbarEditing={this.taskbarEditing.bind(this)} 
+            taskbarEdited={this.taskbarEdited.bind(this)} 
+            rowSelecting={this.rowSelecting.bind(this)} 
+            rowSelected={this.rowSelected.bind(this)} 
+            rowDeselecting={this.rowDeselecting.bind(this)} 
+            rowDeselected={this.rowDeselected.bind(this)} 
+            columnDragStart={this.columnDragStart.bind(this)} 
+            columnDrag={this.columnDrag.bind(this)} 
+            columnDrop={this.columnDrop.bind(this)} 
+            expanding={this.expanding.bind(this)} 
+            expanded={this.expanded.bind(this)} 
+            collapsing={this.collapsing.bind(this)} 
+            collapsed={this.collapsed.bind(this)} 
+            columnMenuClick={this.columnMenuClick.bind(this)} 
+            columnMenuOpen={this.columnMenuOpen.bind(this)} 
+            contextMenuClick={this.contextMenuClick.bind(this)} 
+            contextMenuOpen={this.contextMenuOpen.bind(this)} 
+            resizeStart={this.resizeStart.bind(this)} 
+            resizing={this.resizing.bind(this)} 
+            resizeStop={this.resizeStop.bind(this)} 
+            splitterResizeStart={this.splitterResizeStart.bind(this)} 
+            splitterResizing={this.splitterResizing.bind(this)} 
+            splitterResized={this.splitterResized.bind(this)} 
+            recordDoubleClick={this.recordDoubleClick.bind(this)} 
+            onTaskbarClick={this.onTaskbarClick.bind(this)} 
+            projectStartDate={this.projectStartDate} 
+            projectEndDate={this.projectEndDate}>
+              <ColumnsDirective>
               <ColumnDirective field='TaskID' width='60'></ColumnDirective>
-              <ColumnDirective field='TaskName' headerText='Job Name' width='250' clipMode='EllipsisWithTooltip'></ColumnDirective>
+              <ColumnDirective field='TaskName' width='250'></ColumnDirective>
               <ColumnDirective field='StartDate'></ColumnDirective>
+              <ColumnDirective field='EndDate'></ColumnDirective>
               <ColumnDirective field='Duration'></ColumnDirective>
-              <ColumnDirective field='Progress'></ColumnDirective>
               <ColumnDirective field='Predecessor'></ColumnDirective>
+              <ColumnDirective field='Progress'></ColumnDirective>
             </ColumnsDirective>
-            <EditDialogFieldsDirective>
-              <EditDialogFieldDirective type='General' headerText='General'></EditDialogFieldDirective>
-              <EditDialogFieldDirective type='Dependency'></EditDialogFieldDirective>
-              <EditDialogFieldDirective type='Resources'></EditDialogFieldDirective>
-              <EditDialogFieldDirective type='Notes'></EditDialogFieldDirective>
-            </EditDialogFieldsDirective>
-            <EventMarkersDirective>
-              <EventMarkerDirective day={this.eventMarkerDay1} label='Project approval and kick-off'></EventMarkerDirective>
-              <EventMarkerDirective day={this.eventMarkerDay2} label='Foundation inspection'></EventMarkerDirective>
-              <EventMarkerDirective day={this.eventMarkerDay3} label='Site manager inspection'></EventMarkerDirective>
-              <EventMarkerDirective day={this.eventMarkerDay4} label='Property handover and sign-off'></EventMarkerDirective>
-            </EventMarkersDirective>
-            <Inject services={[Edit, Selection, Toolbar, DayMarkers]}/>
-          </GanttComponent>
-          <div style={{ float: 'right', margin: '10px' }}>Source:
-            <a href="https://en.wikipedia.org/wiki/Construction" target='_blank'>https://en.wikipedia.org/</a>
+              <Inject services={[Selection, DayMarkers, ContextMenu, Reorder, Resize, ColumnMenu, Toolbar, Edit, Filter, Sort]}/>
+            </GanttComponent>
+          </div>
+          <div className='col-lg-3 property-section'>
+            <PropertyPane title='Event Trace'>
+              <table id="property" className="property-panel-table" title="Event Trace" style={{ width: '100%' }}>
+                <tr>
+                  <td>
+                    <div className="eventarea" style={{ height: '346px', overflow: 'auto' }}>
+                      <span className="EventLog" id="EventLog" style={{ wordBreak: 'normal' }}></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ width: '50%', padding: '20px 10px 10px 80px' }}>
+                    <div>
+                      <ButtonComponent onClick={this.clear.bind(this)}> Clear </ButtonComponent>
+                    </div>
+                  </td>
+                </tr>
+
+              </table>
+            </PropertyPane>
           </div>
         </div>
 
@@ -91,4 +273,4 @@ export class Editing extends SampleBase {
     }
 }
 
-export default Editing ;
+export default Events
